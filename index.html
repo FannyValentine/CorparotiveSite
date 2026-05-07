@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Корпоративный сайт</title>
+  <!-- Подключаем внешний CSS -->
+  <link rel="stylesheet" href="styles.css">
+  <!-- Яндекс.Карты -->
+  <script src="https://api-maps.yandex.ru/2.1/?apikey=ваш_ключ&lang=ru_RU" type="text/javascript"></script>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-container">
+    <div class="logo">
+      <img src="https://img.freepik.com/premium-vector/colorful-drawing-creative-studio-icon_1240970-24918.jpg?semt=ais_hybrid&w=740" alt="Логотип компании">
+    </div>
+    <div class="burger" id="burgerBtn">☰</div>
+    <div class="nav-menu" id="navMenu">
+      <a href="#" data-page="home" class="active">Главная</a>
+      <a href="#" data-page="about">О компании</a>
+      <a href="#" data-page="contacts">Контакты</a>
+    </div>
+  </div>
+</header>
+
+<main id="appRoot"></main>
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-col">
+      <h4>КОНТАКТНАЯ ИНФОРМАЦИЯ</h4>
+      <p>☎ +7 (495) 765-43-21</p>
+      <p>✉ support@company.ru</p>
+      <p>📍 г. Москва, ул. Примерная, д. 123</p>
+      <button class="footer-feedback-btn" id="footerFeedbackBtn">📩 Обратная связь</button>
+    </div>
+    <div class="footer-col">
+      <h4>КАРТА САЙТА</h4>
+      <div class="sitemap-links">
+        <a href="#" data-page="home">Главная</a>
+        <a href="#" data-page="about">О компании</a>
+        <a href="#" data-page="contacts">Контакты</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>ДЛЯ БИЗНЕСА</h4>
+      <p>📞 +7 (999) 888-77-66</p>
+      <p>✉ business@company.ru</p>
+      <div class="footer-logo">
+        <img src="https://img.freepik.com/premium-vector/colorful-drawing-creative-studio-icon_1240970-24918.jpg?semt=ais_hybrid&w=740" alt="Логотип компании">
+      </div>
+    </div>
+  </div>
+  <div class="copyright">© 2025 Корпоративный сайт. Все права защищены.</div>
+</footer>
+
+<div id="feedbackModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000;">
+  <div style="background:white; max-width:500px; width:90%; border-radius:32px; padding:30px; position:relative;">
+    <span style="position:absolute; top:15px; right:25px; font-size:28px; cursor:pointer;" id="closeModal">&times;</span>
+    <h3 style="margin-bottom:20px;">Обратная связь</h3>
+    <form id="modalForm">
+      <div class="form-group"><input type="text" id="modalName" placeholder="Ваше имя" required></div>
+      <div class="form-group"><input type="email" id="modalEmail" placeholder="Ваш email" required></div>
+      <div class="form-group"><textarea id="modalMsg" rows="3" placeholder="Ваше сообщение" required></textarea></div>
+      <button type="submit" style="background:#6496ff; color:white; border:none; padding:12px 30px; border-radius:40px; font-weight:bold; cursor:pointer;">ОТПРАВИТЬ</button>
+    </form>
+    <div id="formStatus" style="margin-top:15px;"></div>
+  </div>
+</div>
+
+<script>
+  // Шаблоны страниц
+  const templates = {
+    home: `
+      <div class="container-desktop">
+        <div class="hero-slider" id="heroSlider">
+          <div class="slides-container" id="slidesContainer"></div>
+          <button class="slider-arrow arrow-left" id="prevSlideBtn">‹</button>
+          <button class="slider-arrow arrow-right" id="nextSlideBtn">›</button>
+          <div class="slide-indicators" id="indicators"></div>
+        </div>
+        <div class="info-block">
+          <div class="info-text">
+            <h3>ИНФОРМАЦИОННЫЙ ЗАГОЛОВОК</h3>
+            <p>Мы — лидер в области цифровых решений, предоставляем полный спектр услуг: от разработки стратегии до внедрения сложных IT-продуктов. Наши преимущества — индивидуальный подход, экспертиза международного уровня и прозрачное партнерство.</p>
+            <p>Более 500 успешных проектов в различных отраслях: финансы, ритейл, производство. Доверие клиентов — наш главный капитал.</p>
+          </div>
+          <div class="info-logo">
+            <img src="https://img.freepik.com/premium-vector/colorful-drawing-creative-studio-icon_1240970-24918.jpg?semt=ais_hybrid&w=740" alt="Логотип компании">
+          </div>
+        </div>
+        <div class="sponsors">
+          <div class="section-title">НАШИ ПАРТНЕРЫ</div>
+          <div class="sponsor-grid">
+            <div class="sponsor-card" data-link="https://www.microsoft.com"><img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft"></div>
+            <div class="sponsor-card" data-link="https://www.google.com"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google"></div>
+            <div class="sponsor-card" data-link="https://www.apple.com"><img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple"></div>
+            <div class="sponsor-card" data-link="https://www.amazon.com"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon"></div>
+          </div>
+        </div>
+        <div class="contacts-action">
+          <div class="contact-info-left">
+            <div class="contact-item"><span>☎</span> +7 (999) 123-45-67</div>
+            <div class="contact-item"><span>✉</span> info@company.ru</div>
+            <div class="contact-item"><span>➤</span> <a href="#" id="contactFormLink" style="color:#2c5f8a;">Написать нам</a></div>
+          </div>
+          <div><button class="btn-send" id="mainSendBtn">ОТПРАВИТЬ</button></div>
+        </div>
+      </div>
+    `,
+    about: `
+      <div class="container-desktop">
+        <div class="hero-about">
+          <h1>О НАШЕЙ КОМПАНИИ</h1>
+          <p>Предоставляем качественные услуги, превосходящие ожидания клиентов</p>
+        </div>
+        <div class="mission-block">
+          <h2 class="section-title" style="border-left-color:#2e7d32;">НАША МИССИЯ</h2>
+          <p>Мы создаем инновационные решения с 2010 года. Наша миссия — трансформировать бизнес клиентов через современные технологии, обеспечивая устойчивый рост и конкурентные преимущества. Ценности: честность, профессионализм, клиентоцентричность.</p>
+          <p style="margin-top:12px;"><strong>Предоставлять качественные услуги, превосходящие ожидания клиентов</strong> — наш главный принцип.</p>
+        </div>
+        <h2 class="section-title">НАША КОМАНДА</h2>
+        <div class="team-cards">
+          <div class="team-member"><div class="team-photo">ФОТО</div><h4>Иван Петров</h4><p>Генеральный директор</p></div>
+          <div class="team-member"><div class="team-photo">ФОТО</div><h4>Мария Иванова</h4><p>Финансовый директор</p></div>
+          <div class="team-member"><div class="team-photo">ФОТО</div><h4>Алексей Сидоров</h4><p>Технический директор</p></div>
+        </div>
+        <h2 class="section-title">ЦИФРЫ И ДОСТИЖЕНИЯ</h2>
+        <div class="stats-grid">
+          <div class="stat-card">15+ Лет на рынке</div>
+          <div class="stat-card">500+ Проектов</div>
+          <div class="stat-card">98% Довольных клиентов</div>
+          <div class="stat-card">24/7 Поддержка</div>
+        </div>
+      </div>
+    `,
+    contacts: `
+      <div class="container-desktop">
+        <div class="contacts-hero"><h1 style="color:#b13b2d;">СВЯЖИТЕСЬ С НАМИ</h1></div>
+        <div class="two-columns">
+          <div class="contact-col"><h3>АДРЕС</h3><p>г. Москва, ул. Примерная, д. 123</p><h3>ТЕЛЕФОНЫ</h3><p>+7 (999) 123-45-67<br>+7 (495) 765-43-21</p></div>
+          <div class="contact-col"><h3>EMAIL</h3><p>info@company.ru<br>support@company.ru</p><h3>СОЦИАЛЬНЫЕ СЕТИ</h3><p>Facebook | Instagram | LinkedIn</p></div>
+        </div>
+        <div class="map-container">
+          <div id="interactiveMap"></div>
+          <div class="map-caption">📍 Наш офис в центре Москвы — кликайте по маркеру для дополнительной информации</div>
+        </div>
+        <div class="feedback-form">
+          <h2 style="margin-bottom:24px;">НАПИШИТЕ НАМ</h2>
+          <form id="contactsForm">
+            <div class="form-group"><input type="text" id="contactName" placeholder="Ваше имя" required></div>
+            <div class="form-group"><input type="email" id="contactEmail" placeholder="Ваш email" required></div>
+            <div class="form-group"><textarea id="contactMsg" rows="3" placeholder="Ваше сообщение" required></textarea></div>
+            <button type="submit" class="btn-submit-red">ОТПРАВИТЬ</button>
+            <div id="contactsFormStatus"></div>
+          </form>
+        </div>
+      </div>
+    `
+  };
+
+  // Данные слайдов
+  const slidesData = [
+    { image: "https://picsum.photos/id/104/1600/600", title: "Инновационные решения", desc: "Технологии, которые меняют бизнес" },
+    { image: "https://picsum.photos/id/106/1600/600", title: "Качество и надёжность", desc: "Проверенные стандарты и сертификация" },
+    { image: "https://picsum.photos/id/20/1600/600", title: "Партнёрство мирового уровня", desc: "Доверие клиентов — наш главный капитал" }
+  ];
+
+  let currentSlideIdx = 0;
+  let autoInterval = null;
+  let slidesElements = [];
+
+  function buildSlider() {
+    const container = document.getElementById("slidesContainer");
+    if (!container) return;
+    container.innerHTML = "";
+    slidesElements = [];
+    slidesData.forEach((slide, idx) => {
+      const slideDiv = document.createElement("div");
+      slideDiv.className = "slide";
+      if (idx === 0) slideDiv.classList.add("active-slide");
+      slideDiv.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${slide.image}')`;
+      slideDiv.innerHTML = `<div class="slide-content"><h2>${slide.title}</h2><p>${slide.desc}</p></div>`;
+      container.appendChild(slideDiv);
+      slidesElements.push(slideDiv);
+    });
+    updateIndicators();
+  }
+
+  function updateIndicators() {
+    const indicatorsDiv = document.getElementById("indicators");
+    if (!indicatorsDiv) return;
+    indicatorsDiv.innerHTML = "";
+    slidesData.forEach((_, idx) => {
+      const dot = document.createElement("div");
+      dot.classList.add("dot");
+      if (idx === currentSlideIdx) dot.classList.add("active-dot");
+      dot.addEventListener("click", () => goToSlide(idx));
+      indicatorsDiv.appendChild(dot);
+    });
+  }
+
+  function goToSlide(index) {
+    if (index === currentSlideIdx) return;
+    slidesElements[currentSlideIdx]?.classList.remove("active-slide");
+    currentSlideIdx = (index + slidesData.length) % slidesData.length;
+    slidesElements[currentSlideIdx]?.classList.add("active-slide");
+    updateIndicators();
+    resetAutoInterval();
+  }
+
+  function nextSlide() { goToSlide(currentSlideIdx + 1); }
+  function prevSlide() { goToSlide(currentSlideIdx - 1); }
+
+  function resetAutoInterval() {
+    if (autoInterval) clearInterval(autoInterval);
+    autoInterval = setInterval(() => nextSlide(), 6000);
+  }
+
+  function initSlider() {
+    buildSlider();
+    const prevBtn = document.getElementById("prevSlideBtn");
+    const nextBtn = document.getElementById("nextSlideBtn");
+    if (prevBtn) prevBtn.addEventListener("click", () => { prevSlide(); resetAutoInterval(); });
+    if (nextBtn) nextBtn.addEventListener("click", () => { nextSlide(); resetAutoInterval(); });
+    resetAutoInterval();
+    const sliderContainer = document.getElementById("heroSlider");
+    if (sliderContainer) {
+      sliderContainer.addEventListener("mouseenter", () => { if (autoInterval) clearInterval(autoInterval); });
+      sliderContainer.addEventListener("mouseleave", () => resetAutoInterval());
+    }
+  }
+
+  function initHomeModals() {
+    const modal = document.getElementById("feedbackModal");
+    const openModalBtns = [document.getElementById("mainSendBtn"), document.getElementById("contactFormLink")];
+    const closeModalBtn = document.getElementById("closeModal");
+    function showModal() { if (modal) modal.style.display = "flex"; }
+    function hideModal() { if (modal) modal.style.display = "none"; document.getElementById("formStatus").innerHTML = ""; document.getElementById("modalForm")?.reset(); }
+    openModalBtns.forEach(btn => btn?.addEventListener("click", (e) => { e.preventDefault(); showModal(); }));
+    if (closeModalBtn) closeModalBtn.addEventListener("click", hideModal);
+    if (modal) window.addEventListener("click", (e) => { if (e.target === modal) hideModal(); });
+    const modalForm = document.getElementById("modalForm");
+    if (modalForm) {
+      modalForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("modalName").value.trim();
+        const email = document.getElementById("modalEmail").value.trim();
+        const msg = document.getElementById("modalMsg").value.trim();
+        const statusDiv = document.getElementById("formStatus");
+        if (!name || !email || !msg) { statusDiv.innerHTML = "<span style='color:red;'>Заполните все поля!</span>"; return; }
+        if (!email.includes("@")) { statusDiv.innerHTML = "<span style='color:red;'>Введите корректный email</span>"; return; }
+        statusDiv.innerHTML = "<span style='color:green;'>✓ Сообщение отправлено!</span>";
+        setTimeout(() => { hideModal(); alert("Спасибо! Форма отправлена."); }, 1200);
+        modalForm.reset();
+      });
+    }
+    document.querySelectorAll(".sponsor-card").forEach(card => {
+      card.addEventListener("click", () => { const link = card.getAttribute("data-link"); if (link) window.open(link, "_blank"); });
+    });
+  }
+
+  let yandexMap = null;
+  function initYandexMap() {
+    const mapContainer = document.getElementById("interactiveMap");
+    if (!mapContainer) return;
+    if (yandexMap) { setTimeout(() => yandexMap.container.fitToViewport(), 100); return; }
+    const officeCoords = [55.764689, 37.596579];
+    if (typeof ymaps === 'undefined') { setTimeout(initYandexMap, 500); return; }
+    ymaps.ready(() => {
+      yandexMap = new ymaps.Map("interactiveMap", { center: officeCoords, zoom: 15, controls: ["zoomControl", "fullscreenControl", "typeSelector"] });
+      const placemark = new ymaps.Placemark(officeCoords, {
+        balloonContentHeader: "ООО «Корпоративные решения»",
+        balloonContentBody: "г. Москва, ул. Примерная, д. 123<br>📞 +7 (495) 765-43-21<br>✉ info@company.ru",
+        balloonContentFooter: "Режим работы: пн-пт 9:00–18:00",
+        hintContent: "Наш офис"
+      }, { preset: "islands#redIcon", openBalloonOnClick: true });
+      yandexMap.geoObjects.add(placemark);
+      placemark.balloon.open();
+      yandexMap.behaviors.enable("drag");
+      window.addEventListener("resize", () => yandexMap?.container.fitToViewport());
+    });
+  }
+
+  function initContactsForm() {
+    const contactsForm = document.getElementById("contactsForm");
+    if (contactsForm) {
+      contactsForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("contactName")?.value.trim();
+        const email = document.getElementById("contactEmail")?.value.trim();
+        const msg = document.getElementById("contactMsg")?.value.trim();
+        const statusSpan = document.getElementById("contactsFormStatus");
+        if (!name || !email || !msg) { statusSpan.innerHTML = "<span style='color:red;'>Все поля обязательны</span>"; return; }
+        if (!email.includes("@")) { statusSpan.innerHTML = "<span style='color:red;'>Некорректный email</span>"; return; }
+        statusSpan.innerHTML = "<span style='color:green;'>Успешно отправлено!</span>";
+        contactsForm.reset();
+        setTimeout(() => statusSpan.innerHTML = "", 3000);
+      });
+    }
+  }
+
+  function initFooterAndGlobalNav() {
+    const footerFeedbackBtn = document.getElementById("footerFeedbackBtn");
+    if (footerFeedbackBtn) footerFeedbackBtn.addEventListener("click", () => { const modal = document.getElementById("feedbackModal"); if (modal) modal.style.display = "flex"; });
+    document.querySelectorAll(".sitemap-links a, .footer-col a[data-page]").forEach(link => {
+      link.addEventListener("click", (e) => { e.preventDefault(); const page = link.getAttribute("data-page"); if (page) renderPage(page); });
+    });
+  }
+
+  let currentPage = "home";
+  const appRoot = document.getElementById("appRoot");
+
+  function renderPage(page) {
+    currentPage = page;
+    if (appRoot) {
+      appRoot.innerHTML = templates[page];
+      setTimeout(() => {
+        if (page === "home") { initSlider(); initHomeModals(); }
+        if (page === "contacts") { initContactsForm(); setTimeout(initYandexMap, 200); }
+        if (page !== "contacts" && yandexMap) { yandexMap = null; }
+        document.querySelectorAll(".nav-menu a").forEach(link => {
+          link.classList.remove("active");
+          if (link.getAttribute("data-page") === page) link.classList.add("active");
+        });
+        initFooterAndGlobalNav();
+      }, 10);
+    }
+  }
+
+  document.querySelectorAll(".nav-menu a").forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const page = link.getAttribute("data-page");
+      if (page) renderPage(page);
+      const nav = document.getElementById("navMenu");
+      if (nav && nav.classList.contains("show")) nav.classList.remove("show");
+    });
+  });
+
+  const burgerBtn = document.getElementById("burgerBtn");
+  const navMenuEl = document.getElementById("navMenu");
+  if (burgerBtn) burgerBtn.addEventListener("click", () => navMenuEl.classList.toggle("show"));
+
+  renderPage("home");
+  initFooterAndGlobalNav();
+</script>
+</body>
+</html>
