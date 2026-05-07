@@ -491,14 +491,19 @@ main {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  overflow: hidden;  /* чтобы изображение не выходило за круглые границы */
+  overflow: hidden;
   margin: 0 auto 16px;
+  background: #b0c4b0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .team-photo img {
   width: 100%;
   height: 100%;
-  object-fit: cover;  /* чтобы изображение красиво заполнило круг */
+  object-fit: cover;
+  display: block;
 }
 .stats-grid {
   display: flex;
